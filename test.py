@@ -1,9 +1,9 @@
+import numpy as np
 from cell import Cell
 from spreadsheet import Spreadsheet
 
 
 class Tester:
-    print("Testing  Cell Results:")
 
     def createCell(self):
         self.cell = Cell()
@@ -119,8 +119,6 @@ class Tester:
         else:
             print("Failed: reset")
 
-    print("Testing Spreadsheet Results:")
-
     def createSpreadsheet(self):
         try:
             self.sp = Spreadsheet()
@@ -129,7 +127,7 @@ class Tester:
             print("Succeed: Creating Spreadsheet with Missing Arguments")
 
         try:
-            self.sp = Spreadsheet('s','v')
+            self.sp = Spreadsheet('s', 'v')
             print("Failed: Wrong ValueType passing")
         except:
             print("Succeed: Wrong ValueType passing")
@@ -140,7 +138,7 @@ class Tester:
             print("Failed: Creating Spreadsheet by passing Values")
 
     def check_setCellAt(self):
-        self.sp = Spreadsheet(3,4)
+        self.sp = Spreadsheet(3, 4)
         try:
             self.sp.setCellAt()
             print("Failed: setCellAt Missing Arguments")
@@ -148,47 +146,143 @@ class Tester:
             print("Succeed: setCellAt Missing Arguments")
 
         try:
-            self.sp.setCellAt(5,4,Cell('a'))
+            self.sp.setCellAt(5, 4, Cell('a'))
             print("Failed: setCellAt Index out of range")
         except:
             print("Succeed: setCellAt Index out of range")
-        
-        self.sp.setCellAt(1,2,Cell('a'))
-        if self.sp.getCellAt(1,2).getValue()=='a':
+
+        self.sp.setCellAt(1, 2, Cell('a'))
+        if self.sp.getCellAt(1, 2).getValue() == 'a':
             print("Succeed: setCellAt")
         else:
             print("Failed: setCellAt")
-            
+
     def check_getCellAt(self):
-        self.sp = Spreadsheet(3,4)
-        self.sp.setCellAt(1,2,Cell('a'))
+        self.sp = Spreadsheet(3, 4)
+        self.sp.setCellAt(1, 2, Cell('a'))
         try:
             self.sp.getCellAt(1)
             print("Failed: getCellAt Missing Arguments")
         except:
             print("Succeed: getCellAt Missing Arguments")
-            
-        if self.sp.getCellAt(1,2).getValue()=='a' and isinstance(self.sp.getCellAt(1,2),Cell):
+
+        if self.sp.getCellAt(1, 2).getValue() == 'a' and isinstance(self.sp.getCellAt(1, 2), Cell):
             print("Succeed: getCellAt")
         else:
             print("Failed: getCellAt")
 
     def check_addRow(self):
-        self.sp = Spreadsheet(2,3)
+        self.sp = Spreadsheet(2, 3)
         for i in range(2):
             for j in range(3):
-                self.sp.setCellAt(i,j,Cell(f"{3*i+j}"))
+                self.sp.setCellAt(i, j, Cell(f"{3*i+j}"))
         try:
             self.sp.addRow()
             print("Failed: addRow Missing Argument")
         except:
             print("Succeed: addRow Missing Argument")
-            
-        self.sp.addRow(1)
-        
-            
-            
-        
-        
+
+    def check_removeRow(self):
+        self.sp = Spreadsheet(2, 3)
+        for i in range(2):
+            for j in range(3):
+                self.sp.setCellAt(i, j, Cell(f"{3*i+j}"))
+        try:
+            self.sp.removeRow()
+            print("Failed: removeRow Missing Argument")
+        except:
+            print("Succeed: removeRow Missing Argument")
+
+        self.sp.removeRow(0)
+        if str(self.sp) == str(np.array([[3, 4, 5]])):
+            print("Succeed: removeRow")
+        else:
+            print("Failed: removeRow")
+
+    def check_addColumn(self):
+        self.sp = Spreadsheet(2, 3)
+        for i in range(2):
+            for j in range(3):
+                self.sp.setCellAt(i, j, Cell(f"{3*i+j}"))
+        try:
+            self.sp.addColumn()
+            print("Failed: addColumn Missing Argument")
+        except:
+            print("Succeed: addColumn Missing Argument")
+
+    def check_removeColumn(self):
+        self.sp = Spreadsheet(2, 3)
+        for i in range(2):
+            for j in range(3):
+                self.sp.setCellAt(i, j, Cell(f"{3*i+j}"))
+        try:
+            self.sp.removeColumn()
+            print("Failed: removeColumn Missing Argument")
+        except:
+            print("Succeed: removeColumn Missing Argument")
+
+        self.sp.removeColumn(1)
+        if str(self.sp) == str(np.array([[0, 2], [3, 5]])):
+            print("Succeed: removeColumn")
+        else:
+            print("Failed: removeColumn")
+
+    def check_swapRows(self):
+        self.sp = Spreadsheet(2, 3)
+        for i in range(2):
+            for j in range(3):
+                self.sp.setCellAt(i, j, Cell(f"{3*i+j}"))
+        try:
+            self.sp.swapRows()
+            print("Failed: swapRows Missing Argument")
+        except:
+            print("Succeed: swapRows Missing Argument")
+
+        self.sp.swapRows(0, 1)
+        if str(self.sp) == str(np.array([[3, 4, 5], [0, 1, 2]])):
+            print("Succeed: swapRows")
+        else:
+            print("Failed: swapRows")
+
+    def check_swapColumns(self):
+        self.sp = Spreadsheet(2, 3)
+        for i in range(2):
+            for j in range(3):
+                self.sp.setCellAt(i, j, Cell(f"{3*i+j}"))
+        try:
+            self.sp.swapColumns()
+            print("Failed: swapColumns Missing Argument")
+        except:
+            print("Succeed: swapColumns Missing Argument")
+
+        self.sp.swapColumns(0, 1)
+        if str(self.sp) == str(np.array([[1, 0, 2], [4, 3, 5]])):
+            print("Succeed: swapColumns")
+        else:
+            print("Failed: swapColumns")
+
+
 test = Tester()
+
+
+print("Testing  Cell...\nResults:")
+test.createCell()
+test.check_setValue()
+test.check_getValue()
+test.check_setColor()
+test.check_getColor()
+test.check_toInt()
+test.check_toDouble()
+test.check_toDate()
+test.check_reset()
+
+print("\nTesting Spreadsheet...\nResults:")
+test.createSpreadsheet()
+test.check_setCellAt()
 test.check_getCellAt()
+test.check_addRow()
+test.check_removeRow()
+test.check_addColumn()
+test.check_removeColumn()
+test.check_swapRows()
+test.check_swapColumns()
