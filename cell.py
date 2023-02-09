@@ -10,7 +10,10 @@ Colors = {"Black": 0,
 
 class Cell:
     def __init__(self, value: str = str(), color: str = "Black") -> None:
-        self.__value = value
+        if isinstance(value, str):
+            self.__value = value
+        else:
+            self.__value = str()
         self.__color = Colors[color]
 
     def __repr__(self):
