@@ -1,4 +1,3 @@
-import numpy as np
 from cell import Cell
 from spreadsheet import Spreadsheet
 
@@ -182,6 +181,12 @@ class Tester:
         except:
             print("Succeed: addRow Missing Argument")
 
+        self.sp.addRow(0)
+        if str(self.sp) == "[[, , ], [0, 1, 2], [3, 4, 5]]":
+            print("Succeed: addRow")
+        else:
+            print("Failed: addRow")
+
     def check_removeRow(self):
         self.sp = Spreadsheet(2, 3)
         for i in range(2):
@@ -194,7 +199,7 @@ class Tester:
             print("Succeed: removeRow Missing Argument")
 
         self.sp.removeRow(0)
-        if str(self.sp) == str(np.array([[3, 4, 5]])):
+        if str(self.sp) == "[[3, 4, 5]]":
             print("Succeed: removeRow")
         else:
             print("Failed: removeRow")
@@ -210,6 +215,12 @@ class Tester:
         except:
             print("Succeed: addColumn Missing Argument")
 
+        self.sp.addColumn(1)
+        if str(self.sp) == "[[0, , 1, 2], [3, , 4, 5]]":
+            print("Succeed: addColumn")
+        else:
+            print("Failed: addColumn")
+
     def check_removeColumn(self):
         self.sp = Spreadsheet(2, 3)
         for i in range(2):
@@ -222,7 +233,7 @@ class Tester:
             print("Succeed: removeColumn Missing Argument")
 
         self.sp.removeColumn(1)
-        if str(self.sp) == str(np.array([[0, 2], [3, 5]])):
+        if str(self.sp) == "[[0, 2], [3, 5]]":
             print("Succeed: removeColumn")
         else:
             print("Failed: removeColumn")
@@ -239,7 +250,7 @@ class Tester:
             print("Succeed: swapRows Missing Argument")
 
         self.sp.swapRows(0, 1)
-        if str(self.sp) == str(np.array([[3, 4, 5], [0, 1, 2]])):
+        if str(self.sp) == "[[3, 4, 5], [0, 1, 2]]":
             print("Succeed: swapRows")
         else:
             print("Failed: swapRows")
@@ -256,33 +267,39 @@ class Tester:
             print("Succeed: swapColumns Missing Argument")
 
         self.sp.swapColumns(0, 1)
-        if str(self.sp) == str(np.array([[1, 0, 2], [4, 3, 5]])):
+        if str(self.sp) == "[[1, 0, 2], [4, 3, 5]]":
             print("Succeed: swapColumns")
         else:
             print("Failed: swapColumns")
 
 
+def test_cell():
+    print("Testing  Cell...\nResults:")
+    test.createCell()
+    test.check_setValue()
+    test.check_getValue()
+    test.check_setColor()
+    test.check_getColor()
+    test.check_toInt()
+    test.check_toDouble()
+    test.check_toDate()
+    test.check_reset()
+
+
+def test_spreadsheet():
+    print("\nTesting Spreadsheet...\nResults:")
+    test.createSpreadsheet()
+    test.check_setCellAt()
+    test.check_getCellAt()
+    test.check_addRow()
+    test.check_removeRow()
+    test.check_addColumn()
+    test.check_removeColumn()
+    test.check_swapRows()
+    test.check_swapColumns()
+
+
 test = Tester()
 
-
-print("Testing  Cell...\nResults:")
-test.createCell()
-test.check_setValue()
-test.check_getValue()
-test.check_setColor()
-test.check_getColor()
-test.check_toInt()
-test.check_toDouble()
-test.check_toDate()
-test.check_reset()
-
-print("\nTesting Spreadsheet...\nResults:")
-test.createSpreadsheet()
-test.check_setCellAt()
-test.check_getCellAt()
-test.check_addRow()
-test.check_removeRow()
-test.check_addColumn()
-test.check_removeColumn()
-test.check_swapRows()
-test.check_swapColumns()
+test_cell()
+test_spreadsheet()
