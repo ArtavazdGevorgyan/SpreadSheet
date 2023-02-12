@@ -1,36 +1,56 @@
 from cell import Cell
-import numpy as np
 
 
 class Spreadsheet:
     def __init__(self, row: int, col: int) -> None:
-        self.spredsheet = np.empty(shape=(row, col), dtype=Cell)
+        self.__row = row
+        self.__col = col
+        self.spreadsheet = [[Cell() for j in range(col)] for i in range(row)]
 
     def __repr__(self):
-        return str(self.spredsheet)
+        return str(self.spreadsheet)
 
     def setCellAt(self, row: int, col: int, cell: Cell) -> None:
-        self.spredsheet[row, col] = cell
+        self.spreadsheet[row][col].setValue(cell.getValue())
+        # self.spreadsheet[row][col].setColor(cell.getColor())
 
     def getCellAt(self, row: int, col: int) -> Cell:
-        return self.spredsheet[row, col]
+        return self.spreadsheet[row][col]
 
     def addRow(self, row: int) -> None:
-        self.spredsheet = np.insert(self.spredsheet, (row,),
-                                    Cell(" "), axis=0)   # Fake a arac, chhavatal
+        self.__row += 1
+        self.spreadsheet[row:row] = [[Cell() for i in range(self.__col)]]
 
     def removeRow(self, row: int) -> None:
-        self.spredsheet = np.delete(self.spredsheet, (row,), axis=0)
+        self.__row -= 1
+        del self.spreadsheet[row]
 
     def addColumn(self, col: int) -> None:
-        self.spredsheet = np.insert(self.spredsheet, (col,),
-                                    Cell(" "), axis=1)  # Nuynn el stex
+        self.__col += 1
+        for i in range(self.__row):
+            self.spreadsheet[i][col:col] = [Cell()]
 
     def removeColumn(self, col: int) -> None:
-        self.spredsheet = np.delete(self.spredsheet, (col,), axis=1)
+        self.__col -= 1
+        [self.spreadsheet[i].pop(col) for i in range(self.__row)]
 
     def swapRows(self, row1: int, row2: int) -> None:
-        self.spredsheet[[row1, row2]] = self.spredsheet[[row2, row1]]
+        self.spreadsheet[row1], self.spreadsheet[row2] = \
+            self.spreadsheet[row2], self.spreadsheet[row1]
 
     def swapColumns(self, col1: int, col2: int) -> None:
-        self.spredsheet[:, [col1, col2]] = self.spredsheet[:, [col2, col1]]
+        for i in range(self.__row):
+            self.spreadsheet[i][col1], self.spreadsheet[i][col2] = \
+                self.spreadsheet[i][col2], self.spreadsheet[i][col1]
+
+    def tofile(self, extention=''):
+        fname = 'file.txt'
+        if extention:
+            fname = extention
+        with open(fname, 'w') as file:
+            file.write(" Row, Column: Value\n")
+            for i in range(self.__row):
+                for j in range(self.__col):
+                    if self.spreadsheet[i][j]:
+                        file.write(
+                            f"{i: ^5}  {j: ^5}: {self.spreadsheet[i][j].getValue(): ^5}\n")
