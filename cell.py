@@ -23,7 +23,7 @@ class Cell:
         if isinstance(val, str):
             self.__value = val
 
-    def getValue(self) -> object:
+    def getValue(self) -> str:
         return self.__value
 
     def setColor(self, color: str) -> None:
